@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - ExpenseTracker</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="header-left">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="brand">
+                <i class="fas fa-wallet"></i>
+                <span>ExpenseTracker</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="user-profile">
+                <span id="userName">User</span>
+                <button class="logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#dashboard" class="nav-link active" data-page="dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="#expenses" class="nav-link" data-page="expenses"><i class="fas fa-list"></i> Expenses</a></li>
+                    <li><a href="#add-expense" class="nav-link" data-page="add-expense"><i class="fas fa-plus"></i> Add Expense</a></li>
+                    <li><a href="#invoices" class="nav-link" data-page="invoices"><i class="fas fa-file-upload"></i> Invoices</a></li>
+                    <li><a href="#analytics" class="nav-link" data-page="analytics"><i class="fas fa-chart-pie"></i> Analytics</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-content">
+            <!-- Dashboard Page -->
+            <section id="dashboard" class="page active">
+                <div class="page-header">
+                    <h1>Dashboard</h1>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="month">This Month</button>
+                        <button class="filter-btn" data-filter="week">This Week</button>
+                        <button class="filter-btn" data-filter="year">This Year</button>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">Total Spent</p>
+                            <h3 class="stat-value" id="totalSpent">$0.00</h3>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">Daily Average</p>
+                            <h3 class="stat-value" id="dailyAverage">$0.00</h3>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-shopping-bag"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">Transactions</p>
+                            <h3 class="stat-value" id="transactionCount">0</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charts-section">
+                    <div class="chart-container">
+                        <h3>Spending by Category</h3>
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="recent-expenses">
+                    <h3>Recent Expenses</h3>
+                    <div id="recentList" class="expenses-list">
+                        <p class="empty-state">No expenses yet</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Expenses Page -->
+            <section id="expenses" class="page">
+                <div class="page-header">
+                    <h1>All Expenses</h1>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="today">Today</button>
+                        <button class="filter-btn" data-filter="week">Week</button>
+                        <button class="filter-btn" data-filter="month">Month</button>
+                    </div>
+                </div>
+
+                <div class="expenses-container">
+                    <div id="expensesList" class="expenses-list">
+                        <p class="empty-state">No expenses found</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Add Expense Page -->
+            <section id="add-expense" class="page">
+                <div class="page-header">
+                    <h1>Add New Expense</h1>
+                </div>
+
+                <div class="form-container">
+                    <form id="addExpenseForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="category">Category</label>
+                                <select id="category" name="category_id" required>
+                                    <option value="">Select a category</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="amount">Amount ($)</label>
+                                <input type="number" id="amount" name="amount" step="0.01" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="date">Date</label>
+                                <input type="date" id="date" name="date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="paymentMethod">Payment Method</label>
+                                <select id="paymentMethod" name="payment_method">
+                                    <option value="cash">Cash</option>
+                                    <option value="credit_card">Credit Card</option>
+                                    <option value="debit_card">Debit Card</option>
+                                    <option value="online">Online</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" id="description" name="description" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="notes">Notes (Optional)</label>
+                            <textarea id="notes" name="notes" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Expense</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Invoices Page -->
+            <section id="invoices" class="page">
+                <div class="page-header">
+                    <h1>Invoices</h1>
+                </div>
+
+                <div class="upload-section">
+                    <div class="upload-area" id="uploadArea">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h3>Upload Invoice</h3>
+                        <p>Drag and drop or click to upload</p>
+                        <input type="file" id="invoiceFile" accept=".pdf,.jpg,.jpeg,.png" hidden>
+                    </div>
+                </div>
+
+                <div class="invoice-form">
+                    <form id="uploadInvoiceForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="vendorName">Vendor Name</label>
+                                <input type="text" id="vendorName" name="vendor_name">
+                            </div>
+                            <div class="form-group">
+                                <label for="invoiceNumber">Invoice Number</label>
+                                <input type="text" id="invoiceNumber" name="invoice_number">
+                            </div>
+                            <div class="form-group">
+                                <label for="invoiceDate">Invoice Date</label>
+                                <input type="date" id="invoiceDate" name="invoice_date">
+                            </div>
+                            <div class="form-group">
+                                <label for="invoiceAmount">Amount ($)</label>
+                                <input type="number" id="invoiceAmount" name="total_amount" step="0.01" min="0">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Upload Invoice</button>
+                    </form>
+                </div>
+
+                <div class="invoices-list">
+                    <h3>Uploaded Invoices</h3>
+                    <div id="invoicesList">
+                        <p class="empty-state">No invoices uploaded</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analytics Page -->
+            <section id="analytics" class="page">
+                <div class="page-header">
+                    <h1>Analytics & Reports</h1>
+                </div>
+
+                <div class="analytics-grid">
+                    <div class="chart-container">
+                        <h3>Spending Distribution</h3>
+                        <canvas id="distributionChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Category Breakdown</h3>
+                        <div id="categoryBreakdown"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="assets/js/dashboard.js"></script>
+</body>
+</html>
