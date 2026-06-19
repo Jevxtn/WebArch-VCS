@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExpenseTracker — Smart Financial Management</title>
+    <meta name="description" content="Track expenses, upload invoices, and visualize your spending with ExpenseTracker.">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- ========================
+         NAVIGATION
+    ========================= -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="navbar-brand">
+                <i class="fas fa-wallet"></i>
+                <span>ExpenseTracker</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#stats">Stats</a></li>
+                <li><a href="#about">About</a></li>
+                <li class="nav-divider"></li>
+                <li><a href="login.html" class="btn-login">Log in</a></li>
+                <li><a href="register.html" class="btn-signup">Get Started <i class="fas fa-arrow-right"></i></a></li>
+            </ul>
+            <div class="hamburger" aria-label="Toggle navigation" role="button" tabindex="0">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ========================
+         HERO SECTION
+    ========================= -->
+    <section class="hero">
+        <div class="container hero-inner">
+            <!-- Left: copy -->
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Secure &amp; Private by Design</span>
+                </div>
+                <h1>Take Control of <span class="highlight">Your Finances</span></h1>
+                <p>Smart expense tracking with powerful analytics, invoice management, and real-time insights — all in one clean dashboard.</p>
+                <div class="hero-buttons">
+                    <a href="register.html" class="btn btn-primary btn-lg">
+                        <i class="fas fa-rocket"></i> Start for Free
+                    </a>
+                    <a href="#features" class="btn btn-ghost btn-lg">
+                        See Features <i class="fas fa-chevron-down"></i>
+                    </a>
+                </div>
+                <div class="hero-trust">
+                    <div class="trust-avatars">
+                        <span class="avatar av-1">JD</span>
+                        <span class="avatar av-2">MK</span>
+                        <span class="avatar av-3">RL</span>
+                    </div>
+                    <p>Trusted by <strong>500+</strong> users tracking their finances</p>
+                </div>
+            </div>
+
+            <!-- Right: dashboard preview -->
+            <div class="hero-visual">
+                <div class="dashboard-preview">
+                    <div class="preview-header">
+                        <span class="preview-dot red"></span>
+                        <span class="preview-dot yellow"></span>
+                        <span class="preview-dot green"></span>
+                        <span class="preview-title">Dashboard</span>
+                    </div>
+                    <div class="preview-stats">
+                        <div class="preview-stat">
+                            <span class="ps-label">Total Spent</span>
+                            <span class="ps-value">₱24,580</span>
+                            <span class="ps-change up"><i class="fas fa-arrow-up"></i> 8.2%</span>
+                        </div>
+                        <div class="preview-stat">
+                            <span class="ps-label">This Month</span>
+                            <span class="ps-value">₱6,340</span>
+                            <span class="ps-change down"><i class="fas fa-arrow-down"></i> 3.1%</span>
+                        </div>
+                    </div>
+                    <div class="preview-bar-chart">
+                        <div class="bar-wrap">
+                            <div class="bar" style="height: 55%"></div><span>Jan</span>
+                        </div>
+                        <div class="bar-wrap">
+                            <div class="bar" style="height: 72%"></div><span>Feb</span>
+                        </div>
+                        <div class="bar-wrap">
+                            <div class="bar" style="height: 48%"></div><span>Mar</span>
+                        </div>
+                        <div class="bar-wrap">
+                            <div class="bar active" style="height: 90%"></div><span>Apr</span>
+                        </div>
+                        <div class="bar-wrap">
+                            <div class="bar" style="height: 63%"></div><span>May</span>
+                        </div>
+                        <div class="bar-wrap">
+                            <div class="bar" style="height: 80%"></div><span>Jun</span>
+                        </div>
+                    </div>
+                    <div class="preview-expenses">
+                        <div class="pe-item">
+                            <span class="pe-icon" style="background:#6366f1"><i class="fas fa-utensils"></i></span>
+                            <span class="pe-desc">Food &amp; Dining</span>
+                            <span class="pe-amount">₱1,200</span>
+                        </div>
+                        <div class="pe-item">
+                            <span class="pe-icon" style="background:#ec4899"><i class="fas fa-car"></i></span>
+                            <span class="pe-desc">Transportation</span>
+                            <span class="pe-amount">₱850</span>
+                        </div>
+                        <div class="pe-item">
+                            <span class="pe-icon" style="background:#f59e0b"><i class="fas fa-shopping-bag"></i></span>
+                            <span class="pe-desc">Shopping</span>
+                            <span class="pe-amount">₱2,100</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Floating badges -->
+                <div class="float-badge badge-a">
+                    <i class="fas fa-chart-line"></i>
+                    <div>
+                        <strong>Analytics</strong>
+                        <span>Real-time insights</span>
+                    </div>
+                </div>
+                <div class="float-badge badge-b">
+                    <i class="fas fa-receipt"></i>
+                    <div>
+                        <strong>Invoices</strong>
+                        <span>Stored securely</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================
+         STATS BAR
+    ========================= -->
+    <section id="stats" class="stats-bar">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">500+</span>
+                    <span class="stat-desc">Active Users</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number">₱2M+</span>
+                    <span class="stat-desc">Expenses Tracked</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number">8</span>
+                    <span class="stat-desc">Categories</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-desc">Free to Use</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================
+         FEATURES SECTION
+    ========================= -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Everything you need</span>
+                <h2>Powerful Features</h2>
+                <p>All the tools you need to manage your money in one place, built for simplicity and speed.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon-wrap">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <h3>Easy Registration</h3>
+                    <p>Quick and secure account creation. Get up and running in under a minute.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-wrap">
+                        <i class="fas fa-plus-circle"></i>
+                    </div>
+                    <h3>Daily Logging</h3>
+                    <p>Log expenses in seconds with smart categorization, amounts, and notes.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-wrap">
+                        <i class="fas fa-file-upload"></i>
+                    </div>
+                    <h3>Invoice Upload</h3>
+                    <p>Attach receipts and invoices to your expenses for full traceability.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-wrap">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h3>Analytics</h3>
+                    <p>Visualize your spending patterns with charts and category breakdowns.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-wrap">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Responsive Design</h3>
+                    <p>Fully optimized for phones, tablets, and desktops. Access anywhere.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-wrap">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3>Bank-Grade Security</h3>
+                    <p>Your data is encrypted with secure sessions and protected at every layer.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================
+         HOW IT WORKS
+    ========================= -->
+    <section class="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Simple process</span>
+                <h2>Up and running in minutes</h2>
+            </div>
+            <div class="steps-grid">
+                <div class="step">
+                    <div class="step-number">01</div>
+                    <div class="step-icon"><i class="fas fa-user-plus"></i></div>
+                    <h3>Create an account</h3>
+                    <p>Sign up for free with your email. No credit card required.</p>
+                </div>
+                <div class="step-connector"><i class="fas fa-chevron-right"></i></div>
+                <div class="step">
+                    <div class="step-number">02</div>
+                    <div class="step-icon"><i class="fas fa-plus-circle"></i></div>
+                    <h3>Log your expenses</h3>
+                    <p>Add expenses with category, amount, and optional notes in seconds.</p>
+                </div>
+                <div class="step-connector"><i class="fas fa-chevron-right"></i></div>
+                <div class="step">
+                    <div class="step-number">03</div>
+                    <div class="step-icon"><i class="fas fa-chart-bar"></i></div>
+                    <h3>Track your progress</h3>
+                    <p>View charts and reports to understand and improve your spending habits.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================
+         ABOUT / CTA SECTION
+    ========================= -->
+    <section id="about" class="cta-section">
+        <div class="container">
+            <div class="cta-card">
+                <div class="cta-glow"></div>
+                <div class="cta-content">
+                    <span class="section-tag">Open & Free</span>
+                    <h2>Ready to take control of your money?</h2>
+                    <p>ExpenseTracker is a modern, open-source financial management tool built to help you spend wisely. No subscriptions. No ads. Just clarity.</p>
+                    <div class="cta-buttons">
+                        <a href="register.html" class="btn btn-primary btn-lg">
+                            <i class="fas fa-rocket"></i> Create Free Account
+                        </a>
+                        <a href="login.html" class="btn btn-ghost-light btn-lg">Sign in instead</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================
+         FOOTER
+    ========================= -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <a href="index.html" class="navbar-brand footer-logo">
+                        <i class="fas fa-wallet"></i>
+                        <span>ExpenseTracker</span>
+                    </a>
+                    <p>Smart financial management for everyone.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-col">
+                        <h4>Product</h4>
+                        <ul>
+                            <li><a href="#features">Features</a></li>
+                            <li><a href="#stats">Stats</a></li>
+                            <li><a href="#about">About</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Account</h4>
+                        <ul>
+                            <li><a href="login.html">Log In</a></li>
+                            <li><a href="register.html">Sign Up</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 ExpenseTracker by Emman. All rights reserved.</p>
+                <div class="footer-social">
+                    <a href="https://github.com/Jevxtn" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/script.js"></script>
+</body>
+</html>

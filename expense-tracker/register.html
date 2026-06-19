@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - ExpenseTracker</title>
+    <meta name="description" content="Create your free ExpenseTracker account">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="auth-page">
+    <div class="auth-split-container">
+        <!-- Left Branding Panel -->
+        <div class="auth-branding">
+            <div class="auth-branding-inner">
+                <div class="auth-logo">
+                    <i class="fas fa-wallet"></i>
+                    <span>ExpenseTracker</span>
+                </div>
+                <h2>Start your financial journey today</h2>
+                <p>Join thousands of users who track and manage their expenses smarter with ExpenseTracker.</p>
+                <ul class="auth-features-list">
+                    <li><i class="fas fa-check-circle"></i> Free forever — no credit card needed</li>
+                    <li><i class="fas fa-check-circle"></i> Instant access to all features</li>
+                    <li><i class="fas fa-check-circle"></i> Secure and private by design</li>
+                    <li><i class="fas fa-check-circle"></i> Works on all your devices</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Right Form Panel -->
+        <div class="auth-form-panel">
+            <div class="auth-form-inner">
+                <div class="auth-form-header">
+                    <h1>Create your account</h1>
+                    <p>Fill in the details below to get started</p>
+                </div>
+
+                <form id="registerForm" class="auth-form" novalidate autocomplete="on">
+                    <div class="form-row-two">
+                        <div class="form-group">
+                            <label for="full_name">Full Name <span class="required">*</span></label>
+                            <div class="input-wrapper">
+                                <input
+                                    type="text"
+                                    id="full_name"
+                                    name="full_name"
+                                    placeholder="John Doe"
+                                    autocomplete="name"
+                                    required
+                                    minlength="2"
+                                    maxlength="100"
+                                >
+                            </div>
+                            <span class="field-error" id="fullNameError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="username">Username <span class="required">*</span></label>
+                            <div class="input-wrapper">
+                                <input
+                                    type="text"
+                                    id="username"
+                                    name="username"
+                                    placeholder="johndoe123"
+                                    autocomplete="username"
+                                    required
+                                    minlength="3"
+                                    maxlength="30"
+                                    pattern="[a-zA-Z0-9_]+"
+                                >
+                            </div>
+                            <span class="field-error" id="usernameError"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address <span class="required">*</span></label>
+                        <div class="input-wrapper">
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="you@example.com"
+                                autocomplete="email"
+                                required
+                                maxlength="255"
+                            >
+                        </div>
+                        <span class="field-error" id="emailError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number <span class="optional">(optional)</span></label>
+                        <div class="input-wrapper">
+                            <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
+                                placeholder="+1 (555) 000-0000"
+                                autocomplete="tel"
+                                maxlength="20"
+                            >
+                        </div>
+                        <span class="field-error" id="phoneError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password <span class="required">*</span></label>
+                        <div class="input-wrapper">
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Create a strong password"
+                                autocomplete="new-password"
+                                required
+                                minlength="8"
+                                maxlength="128"
+                            >
+                            <button type="button" class="toggle-password" aria-label="Toggle password visibility" tabindex="-1">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <span class="field-error" id="passwordError"></span>
+                        <!-- Password strength meter -->
+                        <div class="password-strength" id="passwordStrength" hidden>
+                            <div class="strength-bar">
+                                <div class="strength-fill" id="strengthFill"></div>
+                            </div>
+                            <span class="strength-label" id="strengthLabel"></span>
+                        </div>
+                        <ul class="password-requirements" id="passwordRequirements">
+                            <li id="req-length"><i class="fas fa-circle"></i> At least 8 characters</li>
+                            <li id="req-upper"><i class="fas fa-circle"></i> One uppercase letter (A-Z)</li>
+                            <li id="req-lower"><i class="fas fa-circle"></i> One lowercase letter (a-z)</li>
+                            <li id="req-number"><i class="fas fa-circle"></i> One number (0-9)</li>
+                            <li id="req-special"><i class="fas fa-circle"></i> One special character (!@#$...)</li>
+                        </ul>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm Password <span class="required">*</span></label>
+                        <div class="input-wrapper">
+                            <input
+                                type="password"
+                                id="confirm_password"
+                                name="confirm_password"
+                                placeholder="Repeat your password"
+                                autocomplete="new-password"
+                                required
+                                minlength="8"
+                                maxlength="128"
+                            >
+                            <button type="button" class="toggle-password" aria-label="Toggle password visibility" tabindex="-1">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <span class="field-error" id="confirmPasswordError"></span>
+                    </div>
+
+                    <label class="checkbox-label terms-label">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <span class="checkmark"></span>
+                        I agree to the <a href="#" class="inline-link">Terms of Service</a> and <a href="#" class="inline-link">Privacy Policy</a>
+                    </label>
+                    <span class="field-error" id="termsError"></span>
+
+                    <button type="submit" class="btn btn-primary btn-full" id="registerBtn">
+                        <span class="btn-text">Create Account</span>
+                        <span class="btn-spinner" hidden><i class="fas fa-circle-notch fa-spin"></i></span>
+                    </button>
+                </form>
+
+                <div id="message" class="message" role="alert" aria-live="polite"></div>
+
+                <div class="auth-divider"><span>Already have an account?</span></div>
+
+                <div class="auth-form-footer">
+                    <a href="login.html" class="btn btn-outline btn-full">Sign in instead</a>
+                </div>
+
+                <p class="auth-back-home"><a href="index.html"><i class="fas fa-arrow-left"></i> Back to home</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/auth.js"></script>
+</body>
+</html>
