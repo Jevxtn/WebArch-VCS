@@ -1,6 +1,6 @@
 # 💰 Expense-Tracker
 
-A simple and intuitive expense tracking application built with **PHP**, **HTML**, and **CSS**. Track your daily expenses, categorize spending, and manage your finances efficiently.
+A web application for tracking personal expenses, managing invoice files, and viewing category-based spending statistics. Built with **PHP**, **HTML**, **CSS**, and **vanilla JavaScript**.
 
 ---
 
@@ -13,6 +13,7 @@ A simple and intuitive expense tracking application built with **PHP**, **HTML**
 - [Database Configuration](#database-configuration)
 - [Usage](#usage)
 - [Project Structure](#project-structure)
+- [API Reference](#api-reference)
 - [🌍 Deployment Guide](#-deployment-guide)
 - [Deployment Recommendations](#deployment-recommendations)
 - [Contributing](#contributing)
@@ -22,20 +23,24 @@ A simple and intuitive expense tracking application built with **PHP**, **HTML**
 
 ## ✨ Features
 
-- ✅ Add, edit, and delete expenses
-- ✅ Categorize expenses (Food, Transport, Entertainment, etc.)
-- ✅ View expense summary and totals
-- ✅ Date-wise expense tracking
-- ✅ Simple and clean user interface
+- ✅ User registration and login with server-side sessions
+- ✅ Password hashing with bcrypt
+- ✅ Login rate-limit lockout after repeated failures
+- ✅ Add and delete expenses
+- ✅ Category-based organization with default categories per user
+- ✅ Filter expenses by date (today, week, month, custom range)
+- ✅ Invoice upload (PDF/JPG/PNG, up to 5 MB)
+- ✅ Dashboard cards and charts (Chart.js) for totals, averages, and category spend
 - ✅ Responsive design with HTML & CSS
 
 ---
 
 ## 🛠 Tech Stack
 
-- **Backend:** PHP
-- **Frontend:** HTML, CSS
-- **Database:** MySQL (via XAMPP)
+- **Backend:** PHP (JSON APIs)
+- **Frontend:** HTML, CSS, vanilla JavaScript
+- **Database:** MySQL (auto-created by backend on first run)
+- **Charts:** Chart.js
 - **Server:** Apache (via XAMPP)
 
 ---
@@ -44,9 +49,9 @@ A simple and intuitive expense tracking application built with **PHP**, **HTML**
 
 Before you begin, ensure you have the following installed:
 
-- **XAMPP** (Apache + MySQL) - [Download here](https://www.apachefriends.org/)
+- **XAMPP** (Apache + MySQL + PHP 7.4+) - [Download here](https://www.apachefriends.org/)
 - **Git** - [Download here](https://git-scm.com/)
-- **Text Editor or IDE** (VS Code, Sublime Text, etc.)
+- **Modern browser** (Chrome, Edge, Firefox)
 
 ---
 
@@ -65,112 +70,74 @@ Before you begin, ensure you have the following installed:
 Open your terminal/command prompt and run:
 
 ```bash
-git clone https://github.com/Jevxtn/Expense-Tracker.git
+git clone https://github.com/Jevxtn/WebArch-VCS.git
 ```
 
-### Step 3: Move Project to XAMPP
+### Step 3: Place the Project in XAMPP
 
-Move the cloned folder to XAMPP's `htdocs` directory:
+Copy the `expense-tracker` folder into XAMPP's `htdocs` directory:
 
 **On Windows:**
 ```
-C:\xampp\htdocs\Expense-Tracker
+C:\xampp\htdocs\expense-tracker
 ```
 
 **On macOS:**
 ```
-/Applications/XAMPP/xamppfiles/htdocs/Expense-Tracker
+/Applications/XAMPP/xamppfiles/htdocs/expense-tracker
 ```
 
 **On Linux:**
 ```
-/opt/lampp/htdocs/Expense-Tracker
+/opt/lampp/htdocs/expense-tracker
 ```
 
-### Step 4: Access the Application
+### Step 4: Initialize the Database
+
+Open the following URL in your browser to auto-create the database and all tables:
+
+```
+http://localhost/expense-tracker/backend/db_init.php
+```
+
+You should see a message ending with `Database initialization complete!`
+
+### Step 5: Access the Application
 
 Open your web browser and navigate to:
 
 ```
-http://localhost/Expense-Tracker
+http://localhost/expense-tracker/
 ```
+
+Register a new account, then log in to start tracking expenses.
 
 ---
 
 ## 🗄️ Database Configuration
 
-### Step 1: Create the Database
+The database and all tables are created automatically on first run — no manual SQL is required.
 
-1. Open **phpMyAdmin** in your browser:
-   ```
-   http://localhost/phpmyadmin
-   ```
-
-2. Click on **"New"** in the left sidebar
-
-3. Enter database name: `expense_tracker`
-
-4. Click **"Create"**
-
-### Step 2: Create Database Tables
-
-1. Select the `expense_tracker` database
-2. Go to **"SQL"** tab
-3. Copy and paste the following SQL script:
-
-```sql
--- Create Users Table
-CREATE TABLE users (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  username VARCHAR(50) UNIQUE NOT NULL,
-  email VARCHAR(100) UNIQUE NOT NULL,
-  password VARCHAR(255) NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Create Expenses Table
-CREATE TABLE expenses (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  category VARCHAR(50) NOT NULL,
-  amount DECIMAL(10, 2) NOT NULL,
-  description VARCHAR(255),
-  date DATE NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-);
-
--- Create Categories Table (Optional)
-CREATE TABLE categories (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  category_name VARCHAR(50) UNIQUE NOT NULL,
-  icon VARCHAR(50)
-);
-```
-
-4. Click **"Execute"** to run the script
-
-### Step 3: Update Database Configuration
-
-Edit the `config.php` or database connection file in your project:
+If you need to change the database credentials, edit `backend/config.php`:
 
 ```php
-<?php
-// Database Configuration
-$servername = "localhost";
-$username = "root";
-$password = ""; // Default XAMPP password is empty
-$database = "expense_tracker";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $database);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-?>
+define('DB_HOST', 'localhost');
+define('DB_USER', 'root');
+define('DB_PASS', '');        // Default XAMPP password is empty
+define('DB_NAME', 'expense_tracker');
 ```
+
+### Database Schema
+
+The backend manages five tables automatically:
+
+| Table | Description |
+|---|---|
+| `users` | Registered user accounts |
+| `categories` | Per-user expense categories (with color and icon) |
+| `expenses` | Individual expense records |
+| `invoices` | Uploaded invoice files linked to expenses |
+| `budgets` | Monthly budget limits per category |
 
 ---
 
@@ -178,47 +145,116 @@ if ($conn->connect_error) {
 
 ### Adding an Expense
 
-1. Log in to your account (or create a new one if needed)
+1. Log in to your account
 2. Click **"Add Expense"**
 3. Fill in:
    - **Category** (e.g., Food, Transport, etc.)
    - **Amount** (e.g., 50.00)
-   - **Description** (optional, e.g., "Lunch at cafe")
-   - **Date** (select the date of expense)
+   - **Description** (optional)
+   - **Date** (select the date of the expense)
 4. Click **"Save"**
 
 ### Viewing Expenses
 
 - View all expenses on the dashboard
-- Filter by category or date range
-- See total spending overview
+- Filter by: **today**, **this week**, **this month**, or a **custom date range**
+- See total and average spending on dashboard cards
 
-### Editing/Deleting Expenses
+### Deleting Expenses
 
-- Click **"Edit"** to modify an expense
-- Click **"Delete"** to remove an expense
+- Click **"Delete"** next to any expense to remove it
+
+### Uploading Invoices
+
+- Attach a PDF, JPG, or PNG invoice file (up to 5 MB) when adding an expense
+- Uploaded invoices are stored in `uploads/invoices/`
+
+### Dashboard Charts
+
+- Category spend breakdown (pie/bar chart via Chart.js)
+- Spending over time (week, month, or year view)
 
 ---
 
 ## 📁 Project Structure
 
 ```
-Expense-Tracker/
-├── README.md                 # Project documentation
-├── config.php               # Database configuration
-├── index.php                # Main dashboard
-├── add_expense.php          # Add expense page
-├── edit_expense.php         # Edit expense page
-├── delete_expense.php       # Delete expense functionality
-├── login.php                # User login
-├── register.php             # User registration
-├── logout.php               # User logout
-├── css/
-│   └── style.css           # Main stylesheet
-├── js/
-│   └── script.js           # JavaScript functionality
-└── assets/                  # Images and icons (if any)
+expense-tracker/
+├── index.html                  # Landing / main page
+├── login.html                  # Login page
+├── register.html               # Registration page
+├── dashboard.html              # Dashboard with charts
+├── assets/
+│   ├── css/
+│   │   └── style.css           # Main stylesheet
+│   └── js/
+│       ├── auth.js             # Auth form logic
+│       ├── script.js           # Expense list and CRUD
+│       └── dashboard.js        # Dashboard charts and stats
+├── backend/
+│   ├── config.php              # DB connection and table setup
+│   ├── db_init.php             # One-time database initializer
+│   ├── register.php            # User registration API
+│   ├── login.php               # User login API
+│   ├── logout.php              # Session logout API
+│   ├── check_session.php       # Session check API
+│   ├── add_expense.php         # Add expense API
+│   ├── get_expenses.php        # List expenses API (with filters)
+│   ├── delete_expense.php      # Delete expense API
+│   ├── get_categories.php      # List categories API
+│   ├── get_statistics.php      # Dashboard statistics API
+│   ├── upload_invoice.php      # Invoice upload API
+│   └── get_invoices.php        # List invoices API
+└── uploads/
+    └── invoices/               # Uploaded invoice files
 ```
+
+---
+
+## 🔌 API Reference
+
+### Authentication
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `backend/register.php` | Register a new user |
+| `POST` | `backend/login.php` | Log in and start a session |
+| `POST` | `backend/logout.php` | End the current session |
+| `GET` | `backend/check_session.php` | Check if user is authenticated |
+
+### Expenses
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `backend/add_expense.php` | Add a new expense |
+| `GET` | `backend/get_expenses.php?filter=all\|today\|week\|month\|custom` | List expenses with optional filter |
+| `POST` | `backend/delete_expense.php` | Delete an expense |
+
+### Dashboard
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `backend/get_categories.php` | List expense categories |
+| `GET` | `backend/get_statistics.php?filter=week\|month\|year` | Spending statistics |
+
+### Invoices
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `backend/upload_invoice.php` | Upload an invoice file |
+| `GET` | `backend/get_invoices.php` | List uploaded invoices |
+
+---
+
+## 🔒 Security Notes
+
+- Passwords are stored with **bcrypt** hashing
+- Session IDs are regenerated on successful login (session fixation mitigation)
+- Session cookie is set with **HttpOnly** and **SameSite=Lax**
+- All data endpoints require an authenticated PHP session
+- Uploads are restricted to PDF/JPG/PNG, max 5 MB
+- Generic login error messages prevent user enumeration
+- Rate-limit lockout after repeated failed login attempts
 
 ---
 
@@ -258,24 +294,23 @@ Expense-Tracker/
 
 5. **Deploy Your Project:**
    ```
-   C:\inetpub\wwwroot\Expense-Tracker
+   C:\inetpub\wwwroot\expense-tracker
    ```
 
-6. **Create Database:**
-   - Open MySQL Workbench or Command Line
-   - Run the SQL script provided in Database Configuration section
-
-7. **Update config.php with server credentials:**
+6. **Update `backend/config.php` with server credentials:**
    ```php
-   $servername = "localhost";
-   $username = "root";
-   $password = "your_password";
-   $database = "expense_tracker";
+   define('DB_USER', 'root');
+   define('DB_PASS', 'your_password');
+   ```
+
+7. **Initialize the database** by visiting:
+   ```
+   http://your-windows-server-ip/expense-tracker/backend/db_init.php
    ```
 
 8. **Access Your Application:**
    ```
-   http://your-windows-server-ip/Expense-Tracker
+   http://your-windows-server-ip/expense-tracker
    ```
 
 **Advantages:** ✅ Full control, secure on private network, no monthly fees
@@ -318,21 +353,16 @@ Expense-Tracker/
    sudo mysql_secure_installation
    ```
 
-5. **Clone Your Project:**
+5. **Clone and Place the Project:**
    ```bash
    cd /var/www/html
-   sudo git clone https://github.com/Jevxtn/Expense-Tracker.git
-   sudo chown -R www-data:www-data /var/www/html/Expense-Tracker
-   sudo chmod -R 755 /var/www/html/Expense-Tracker
+   sudo git clone https://github.com/Jevxtn/WebArch-VCS.git
+   sudo cp -r WebArch-VCS/expense-tracker /var/www/html/expense-tracker
+   sudo chown -R www-data:www-data /var/www/html/expense-tracker
+   sudo chmod -R 755 /var/www/html/expense-tracker
    ```
 
-6. **Create Database:**
-   ```bash
-   sudo mysql -u root -p
-   ```
-   Then paste the SQL script from Database Configuration section
-
-7. **Configure Apache Virtual Host:**
+6. **Configure Apache Virtual Host:**
    ```bash
    sudo nano /etc/apache2/sites-available/expense-tracker.conf
    ```
@@ -341,32 +371,34 @@ Expense-Tracker/
    ```apache
    <VirtualHost *:80>
        ServerName your-domain.com
-       ServerAdmin admin@your-domain.com
-       DocumentRoot /var/www/html/Expense-Tracker
-       
-       <Directory /var/www/html/Expense-Tracker>
+       DocumentRoot /var/www/html/expense-tracker
+
+       <Directory /var/www/html/expense-tracker>
            AllowOverride All
            Require all granted
        </Directory>
-       
+
        ErrorLog ${APACHE_LOG_DIR}/error.log
        CustomLog ${APACHE_LOG_DIR}/access.log combined
    </VirtualHost>
    ```
 
-8. **Enable Site and Mod Rewrite:**
+7. **Enable Site and Mod Rewrite:**
    ```bash
    sudo a2ensite expense-tracker.conf
    sudo a2enmod rewrite
    sudo systemctl restart apache2
    ```
 
-9. **Update config.php:**
+8. **Update `backend/config.php`:**
    ```php
-   $servername = "localhost";
-   $username = "root";
-   $password = "your_password";
-   $database = "expense_tracker";
+   define('DB_USER', 'root');
+   define('DB_PASS', 'your_password');
+   ```
+
+9. **Initialize the database:**
+   ```
+   http://your-domain.com/backend/db_init.php
    ```
 
 10. **Access Your Application:**
@@ -381,103 +413,15 @@ Expense-Tracker/
 
 ### ☁️ **Deployment Option 3: Cloud Platforms**
 
-#### **Option A: Heroku (Easiest for Beginners)**
-
-**Best For:** Rapid deployment, prototyping, small projects
-
-**Steps:**
-
-1. **Create Heroku Account:**
-   - Go to [heroku.com](https://www.heroku.com) and sign up
-
-2. **Install Heroku CLI:**
-   ```bash
-   # Windows
-   choco install heroku-cli
-   
-   # macOS
-   brew tap heroku/brew && brew install heroku
-   
-   # Linux
-   curl https://cli-assets.heroku.com/install.sh | sh
-   ```
-
-3. **Login to Heroku:**
-   ```bash
-   heroku login
-   ```
-
-4. **Create Heroku App:**
-   ```bash
-   heroku create expense-tracker-app
-   ```
-
-5. **Add ClearDB MySQL (Free tier):**
-   ```bash
-   heroku addons:create cleardb:ignite
-   ```
-
-6. **Get Database URL:**
-   ```bash
-   heroku config:get CLEARDB_DATABASE_URL
-   ```
-
-7. **Update config.php for Heroku:**
-   ```php
-   <?php
-   if (isset($_ENV['CLEARDB_DATABASE_URL'])) {
-       $url = parse_url($_ENV['CLEARDB_DATABASE_URL']);
-       $servername = $url['host'];
-       $username = $url['user'];
-       $password = $url['pass'];
-       $database = substr($url['path'], 1);
-   } else {
-       $servername = "localhost";
-       $username = "root";
-       $password = "";
-       $database = "expense_tracker";
-   }
-   
-   $conn = new mysqli($servername, $username, $password, $database);
-   if ($conn->connect_error) {
-       die("Connection failed: " . $conn->connect_error);
-   }
-   ?>
-   ```
-
-8. **Create Procfile:**
-   ```bash
-   echo "web: vendor/bin/heroku-php-apache2" > Procfile
-   ```
-
-9. **Deploy:**
-   ```bash
-   git add .
-   git commit -m "Prepare for Heroku deployment"
-   git push heroku main
-   ```
-
-10. **Run Database Setup:**
-    ```bash
-    heroku run mysql -u [username] -p [password] < database.sql
-    ```
-
-**Advantages:** ✅ Easy deployment, free tier available, automatic scaling
-**Disadvantages:** ❌ Limited free resources, can be expensive at scale
-
----
-
-#### **Option B: AWS (EC2) - Professional Production**
+#### **Option A: AWS (EC2) - Professional Production**
 
 **Best For:** Large-scale applications, enterprise use
 
 **Quick Setup:**
 
 1. **Create EC2 Instance:**
-   - Go to AWS Console → EC2
-   - Click "Launch Instance"
-   - Select Ubuntu 20.04 LTS
-   - Choose t2.micro (free tier eligible)
+   - Go to AWS Console → EC2 → Launch Instance
+   - Select Ubuntu 20.04 LTS, choose t2.micro (free tier eligible)
    - Configure security groups (allow HTTP, HTTPS, SSH)
 
 2. **Connect to Instance:**
@@ -487,51 +431,16 @@ Expense-Tracker/
 
 3. **Follow Linux Server Setup (Option 2 above)**
 
-4. **Set Up RDS for MySQL:**
-   - Go to AWS RDS → Create Database
-   - Choose MySQL
-   - Configure endpoint, username, password
-   - Update config.php with RDS endpoint
-
-5. **Use Elastic IP (Optional):**
-   - Attach Elastic IP to your EC2 instance for static IP
+4. **Set Up RDS for MySQL (optional):**
+   - Go to AWS RDS → Create Database → MySQL
+   - Update `backend/config.php` with the RDS endpoint
 
 **Advantages:** ✅ Highly scalable, professional grade, reliable
 **Disadvantages:** ❌ Steeper learning curve, can be expensive
 
 ---
 
-#### **Option C: InfinityFree / 000webhost (Completely Free)**
-
-**Best For:** Learning, portfolio projects, no budget
-
-**Steps:**
-
-1. **Create Account:** Go to [infinityfree.net](https://infinityfree.net) or [000webhost.com](https://www.000webhost.com)
-
-2. **Create Free Hosting Account**
-
-3. **Upload Files:**
-   - Use File Manager or FTP
-   - Upload all project files
-
-4. **Create Database:**
-   - Use hosting control panel (cPanel)
-   - Create MySQL database
-
-5. **Update config.php with provided credentials**
-
-6. **Access Application:** 
-   ```
-   http://your-subdomain.infinityfree.com
-   ```
-
-**Advantages:** ✅ Completely free, no credit card needed
-**Disadvantages:** ❌ Limited resources, slow performance, unreliable uptime
-
----
-
-#### **Option D: DigitalOcean Droplets (Affordable Recommendation)**
+#### **Option B: DigitalOcean Droplets (Affordable Recommendation)**
 
 **Best For:** Small to medium projects, developers, good value
 
@@ -541,8 +450,8 @@ Expense-Tracker/
 
 2. **Create Droplet:**
    - Choose Ubuntu 20.04
-   - Select $6/month plan (good value)
-   - Choose closest region
+   - Select $6/month plan
+   - Choose the closest region
 
 3. **Connect via SSH:**
    ```bash
@@ -561,16 +470,35 @@ Expense-Tracker/
 
 ---
 
+#### **Option C: InfinityFree / 000webhost (Completely Free)**
+
+**Best For:** Learning, portfolio projects, no budget
+
+**Steps:**
+
+1. **Create Account:** Go to [infinityfree.net](https://infinityfree.net) or [000webhost.com](https://www.000webhost.com)
+2. **Upload project files** via File Manager or FTP
+3. **Create a MySQL database** using the hosting control panel (cPanel)
+4. **Update `backend/config.php`** with the provided credentials
+5. **Initialize the database** by visiting `backend/db_init.php` in your browser
+6. **Access Application:**
+   ```
+   http://your-subdomain.infinityfree.com
+   ```
+
+**Advantages:** ✅ Completely free, no credit card needed
+**Disadvantages:** ❌ Limited resources, slow performance, unreliable uptime
+
+---
+
 ## 🏆 Deployment Recommendations
 
 | **Scenario** | **Best Option** | **Reason** |
 |---|---|---|
-| **Learning & Development** | Windows/Linux Local | Full control, no costs |
+| **Learning & Development** | Windows/Linux Local (XAMPP) | Full control, no costs |
 | **Small Business** | Linux VPS (DigitalOcean) | Affordable, reliable, scalable |
-| **Prototype/MVP** | Heroku | Quick deployment, minimal setup |
 | **Personal Project** | InfinityFree | Free, good for portfolio |
 | **Enterprise/Production** | AWS EC2 + RDS | Scalable, secure, professional |
-| **Team Project** | DigitalOcean App Platform | Easy collaboration, affordable |
 
 ### **⭐ RECOMMENDED FOR THIS PROJECT: DigitalOcean ($6/month)**
 
@@ -578,17 +506,51 @@ Expense-Tracker/
 - ✅ **Perfect balance:** Affordable yet professional
 - ✅ **Easy setup:** Simple droplet creation and management
 - ✅ **Full control:** Not limited like free hosting
-- ✅ **Good performance:** Suitable for expense tracker application
+- ✅ **Good performance:** Suitable for an expense tracker application
 - ✅ **Scalability:** Can upgrade as your app grows
 - ✅ **24/7 uptime:** Reliable for personal/small business use
 
-**Quick Start:**
-```bash
-# After creating DigitalOcean droplet
-ssh root@your-ip
-apt update && apt upgrade -y
-# Follow Linux deployment steps above
-```
+---
+
+## ⚠️ Troubleshooting
+
+### Issue: "Connection refused" or "Cannot connect to MySQL"
+- **Solution:** Make sure Apache and MySQL are running in XAMPP Control Panel
+- Verify credentials in `backend/config.php`
+
+### Issue: "404 Not Found"
+- **Solution:** Verify the project folder is named `expense-tracker` (lowercase) under `htdocs`
+
+### Issue: Database not initialized
+- **Solution:** Visit `http://localhost/expense-tracker/backend/db_init.php` in your browser
+
+### Issue: Login keeps failing
+- Use the exact email and password you registered with
+- After repeated failures, wait for the lockout period to end
+
+### Issue: Upload fails
+- File must be PDF, JPG, or PNG
+- File must be 5 MB or smaller
+- Ensure `uploads/invoices/` is writable by the web server
+
+### Issue: Permission Denied on Linux
+- **Solution:** Run `sudo chown -R www-data:www-data /var/www/html/expense-tracker`
+
+### Issue: Unexpected JSON/Network errors
+- Open the app via `http://localhost/expense-tracker/` — not via `file://`
+- Check Apache and PHP error logs
+
+---
+
+## 📚 Documentation
+
+Additional documentation is available in the `expense-tracker/` folder:
+
+- [`QUICK_START.md`](expense-tracker/QUICK_START.md) — Minimal steps to get running
+- [`SETUP.md`](expense-tracker/SETUP.md) — Full local installation guide
+- [`USER_GUIDE.md`](expense-tracker/USER_GUIDE.md) — How to use the application
+- [`DEVELOPER_GUIDE.md`](expense-tracker/DEVELOPER_GUIDE.md) — API and internals reference
+- [`CHANGELOG.md`](expense-tracker/CHANGELOG.md) — Version history
 
 ---
 
@@ -602,25 +564,6 @@ Contributions are welcome! To contribute:
 4. Commit your changes (`git commit -m 'Add new feature'`)
 5. Push to the branch (`git push origin feature/YourFeature`)
 6. Open a **Pull Request**
-
----
-
-## ⚠️ Troubleshooting
-
-### Issue: "Connection refused" or "Cannot connect to MySQL"
-- **Solution:** Make sure Apache and MySQL are running in XAMPP Control Panel
-
-### Issue: "404 Not Found"
-- **Solution:** Verify the project is in the correct `htdocs` folder and the URL is correct
-
-### Issue: "Database does not exist"
-- **Solution:** Make sure you've created the `expense_tracker` database in phpMyAdmin
-
-### Issue: Permission Denied on Linux
-- **Solution:** Run `sudo chown -R www-data:www-data /var/www/html/Expense-Tracker`
-
-### Issue: PHP Files Not Executing
-- **Solution:** Ensure PHP is properly installed and Apache mod_php is enabled
 
 ---
 
