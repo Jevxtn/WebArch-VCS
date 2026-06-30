@@ -1,9 +1,14 @@
 <?php
 // ── Database Configuration ──────────────────────────────────────────
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_NAME', 'expense_tracker');
+$dbHost = getenv('DB_HOST') ?: 'localhost';
+$dbUser = getenv('DB_USERNAME') ?: (getenv('DB_USER') ?: 'root');
+$dbPass = getenv('DB_PASSWORD') ?: (getenv('DB_PASS') ?: '');
+$dbName = getenv('DB_DATABASE') ?: (getenv('DB_NAME') ?: 'expense_tracker');
+
+define('DB_HOST', $dbHost);
+define('DB_USER', $dbUser);
+define('DB_PASS', $dbPass);
+define('DB_NAME', $dbName);
 
 // Never expose PHP errors to the client
 error_reporting(E_ALL);

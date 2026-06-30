@@ -56,6 +56,39 @@ expense-tracker/
 - MySQL 5.7+ or MariaDB equivalent
 - Modern browser
 
+## Docker Deployment
+
+You can run the full stack (Apache/PHP + MySQL) with Docker Compose from the repository root.
+
+1. Build and start containers:
+
+```bash
+docker compose up -d --build
+```
+
+2. Open the app:
+
+```text
+http://localhost:8080
+```
+
+3. Stop containers:
+
+```bash
+docker compose down
+```
+
+4. Stop and remove database volume (fresh reset):
+
+```bash
+docker compose down -v
+```
+
+Notes:
+- The backend reads DB settings from environment variables in `docker-compose.yml`.
+- Uploaded invoices are stored in the container at `uploads/invoices/`.
+- DB data is persisted in the named volume `db_data`.
+
 ## Setup
 
 1. Copy this project to htdocs as expense-tracker.
