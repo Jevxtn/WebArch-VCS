@@ -72,6 +72,17 @@ docker compose up -d --build
 http://localhost:8080
 ```
 
+Database UI (phpMyAdmin):
+
+```text
+http://localhost:8081
+```
+
+phpMyAdmin login:
+- Server: `db`
+- Username: `root`
+- Password: `root`
+
 3. Stop containers:
 
 ```bash
@@ -88,6 +99,7 @@ Notes:
 - The backend reads DB settings from environment variables in `docker-compose.yml`.
 - Uploaded invoices are stored in the container at `uploads/invoices/`.
 - DB data is persisted in the named volume `db_data`.
+- phpMyAdmin runs as a separate container for browser-based database management.
 
 ## Setup
 
