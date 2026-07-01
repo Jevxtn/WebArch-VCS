@@ -1,8 +1,16 @@
+# VCS metadata is not needed in the build context.
 .git
+# Keep local git rules out of the image build context.
 .gitignore
+# Node dependencies are not used by this PHP image build.
 node_modules
+# Composer vendor can be excluded if dependencies are not built from host.
 vendor
+# Exclude logs to reduce context size and avoid stale local artifacts.
 *.log
+# macOS Finder metadata file.
 .DS_Store
+# Prevent local secrets/env overrides from being sent to Docker daemon.
 .env
+# Documentation is not required for runtime image.
 docs

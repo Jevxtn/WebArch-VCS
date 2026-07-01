@@ -1,11 +1,17 @@
+# Compose stack with 3 services:
+# 1) web (PHP + Apache app), 2) db (MySQL), 3) phpmyadmin (DB UI).
 services:
   web:
+    # Build the web image from the local Dockerfile in this folder.
     build: .
     container_name: webarch-web
+    # Keep service running across reboots/crashes unless manually stopped.
     restart: unless-stopped
     ports:
+      # Host port 8080 -> container port 80 (HTTP).
       - "8080:80"
     environment:
+      # App DB connection values consumed by backend PHP config.
       DB_HOST: db
       DB_PORT: 3306
       DB_DATABASE: expense_tracker
@@ -13,35 +19,45 @@ services:
       DB_PASSWORD: webarch_pass
     depends_on:
       db:
+        # Wait for DB healthcheck to pass before starting web service.
         condition: service_healthy
 
   db:
+    # Official MySQL 8 image used as persistent relational database.
     image: mysql:8.0
     container_name: webarch-db
     restart: unless-stopped
+    # Keep auth compatibility and UTF-8 defaults for broad PHP/MySQL support.
     command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     environment:
+      # Initial DB bootstrap values (applied on first container init).
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: expense_tracker
       MYSQL_USER: webarch_user
       MYSQL_PASSWORD: webarch_pass
     ports:
+      # Expose MySQL on host 3307 to avoid conflicts with local 3306.
       - "3307:3306"
     volumes:
+      # Named volume keeps DB data across container recreation.
       - db_data:/var/lib/mysql
     healthcheck:
+      # Container is healthy when mysqladmin can ping local server.
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
       interval: 10s
       timeout: 5s
       retries: 10
 
   phpmyadmin:
+    # Web UI for DB inspection and manual administration.
     image: phpmyadmin:latest
     container_name: webarch-phpmyadmin
     restart: unless-stopped
     ports:
+      # phpMyAdmin reachable at http://localhost:8081
       - "8081:80"
     environment:
+      # Connect phpMyAdmin to the db service inside the Docker network.
       PMA_HOST: db
       PMA_PORT: 3306
       PMA_USER: root
@@ -51,5 +67,6 @@ services:
       db:
         condition: service_healthy
 
+# Named volume declaration used by db service above.
 volumes:
   db_data:
